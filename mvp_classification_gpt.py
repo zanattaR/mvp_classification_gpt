@@ -24,10 +24,10 @@ if reviewSheet is not None:
         st.warning("Há mais de 100 reviews nesta base, a classificação só será feita com os 100 primeiros.")
 
     # Filtrando os 100 primeiros reviews
-    df_reviews = df_reviews.iloc[:10]
+    df_reviews = df_reviews.iloc[:100]
 
 # Inserindo arquivo de classificações
-classSheet = st.file_uploader("Insira um arquivo .xlsx com as Subcategorias e Detalhamentos (Máx: 30 classes de cada)")
+classSheet = st.file_uploader("Insira um arquivo .xlsx com as Subcategorias e Detalhamentos (Máx: 30 classes p/ Subcategoria e 70 p/ Detalhamento)")
 if classSheet is not None:
 
     # Lendo reviews e verificando se há mais de 30 registros
@@ -35,11 +35,11 @@ if classSheet is not None:
     if len(df_classes['Subcategoria'].dropna()) >30:
         st.warning("Há mais de 30 Subcategorias nesta base, serão apenas considerados as 30 primeiras.")
 
-    if len(df_classes['Detalhamento'].dropna()) >30:
-        st.warning("Há mais de 30 Detalhamentos nesta base, serão apenas considerados os 30 primeiros.")
+    if len(df_classes['Detalhamento'].dropna()) >70:
+        st.warning("Há mais de 70 Detalhamentos nesta base, serão apenas considerados os 70 primeiros.")
     
     # Filtrando as 30 primeriras classificações
-    df_classes = df_classes.iloc[:30]
+    df_classes = df_classes.iloc[:70]
 
 # Visualizar dados
 check_reviews = st.checkbox("Visualizar Reviews")
@@ -55,10 +55,14 @@ if classSheet is not None:
 check_detail = st.checkbox("Visualizar Detalhamentos")
 if classSheet is not None:
     if check_detail:
-        st.write(df_classes[['Detalhamento']].iloc[:30])
+        st.write(df_classes[['Detalhamento']].iloc[:70])
 
 ############# Tratamento e preparação de dados #############
 if reviewSheet and classSheet is not None:
+
+    # Substituindo variações de nomes de reviews
+    list_string = ['Text','text','TEXT','Reviews','reviews','REVIEW','REVIEWS']
+    df_reviews = replace_column_with_review(df_reviews, list_string)
 
     # Criar lista de reviews com a string 'Comentário: ' no início
     list_reviews = make_reviews(df_reviews)

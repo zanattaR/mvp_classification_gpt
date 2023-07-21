@@ -22,6 +22,12 @@ def get_table_download_link(df):
 	b64 = base64.b64encode(val)
 	return f'<a href="data:application/octet-stream;base64,{b64.decode()}" download="extract.xlsx">Download</a>'
 
+def replace_column_with_review(df_reviews, list_string):
+    for column in df_reviews.columns:
+        if column in list_string:
+            df_reviews.rename(columns={column: "Review"}, inplace=True)
+    return df_reviews
+
 # Função que recebe o dataframe de reviews e adiciona a string 'Comentário: ', retornando uma lista dos reviews
 def make_reviews(df_reviews):
     list_reviews = []
@@ -53,7 +59,8 @@ def create_system(df_classes):
     \nCategoria: Elogio, Reclamação, Sugestão, Dúvida, Indefinido
     \nSubcategoria: {string_sub}
     \nDetalhamento: {string_detail}
-    \nTodos os itens devem obrigatoriamente conter um Sentimento, Categoria, Subcategoria e Detalhamento."""
+    \nTodos os itens devem obrigatoriamente conter um Sentimento, Categoria, Subcategoria e Detalhamento.
+    \nVerifique se a sugestão de classificação está contida na lista, caso contrário, reconsiderar utilizando exatamente o texto contido na lista."""
     
     return system
 
