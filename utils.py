@@ -51,7 +51,8 @@ def create_system(df_classes):
     string_sub = ', '.join(list_sub)
     string_detail = ', '.join(list_detail)
     
-    system = f"""Por favor, classifique os comentários a seguir com base nas Subcategorias e Detalhamentos fornecidos.
+    system = f"""Haja como um classificador de texto. Irei fornecer um texto de um comentário de uma loja de aplicativos e 
+    seu objetivo será classificar o comentário em 4 grupos de classes pré-estabelecidas que eu também vou fornecer.
     Para cada comentário, selecione um item de cada lista, respeitando exatamente o texto do item, sem qualquer variação.
     Se algum item não se encaixar ao comentário, preencha com "".
     Antes de responder, certifique-se de que o item realmente está na sua respectiva lista.
@@ -95,8 +96,9 @@ async def get_chatgpt_responses(system, lotes_reviews):
                 {"role": "system", "content": system},
                 {"role": "user", "content": f'''Sua resposta deve ser apenas as classificações geradas dentro de um array, nada mais.
                 \nComentário: É bom, mas está com problemas
-                \nComentário: excelente'''},
-                {"role": "assistant", "content": "['Misto', 'Reclamação', 'Genérico', 'Comentário  genérico']\n['Positivo', 'Elogio', 'Genérico', 'Comentário  genérico']"},
+                \nComentário: excelente
+                \nComentário: App pesado porém tem ótimos conteúdos'''},
+                {"role": "assistant", "content": "['Misto', 'Reclamação', 'Genérico', 'Comentário  genérico']\n['Positivo', 'Elogio', 'Genérico', 'Comentário  genérico']\n['Misto', 'Reclamação', 'Técnico', 'Conteúdo travando']"},
                 {"role": "user", "content": '''Sua resposta deve ser apenas as classificações geradas dentro de um array,
                 nada mais. ''' + review_string}
             ],
