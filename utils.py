@@ -51,16 +51,16 @@ def create_system(df_classes):
     string_sub = ', '.join(list_sub)
     string_detail = ', '.join(list_detail)
     
-    system = f"""Haja como um classificador de textos. Irei fornecer alguns textos de comentários de uma loja de aplicativos e 
-    seu objetivo será classificar cada comentário em 4 grupos de classes pré-estabelecidas que eu também vou fornecer. 
-    A classificação feita deve ser exclusivamente com o que está dentro do grupo. A classificação deve ser feita com a classe mais próxima em seu respectivo grupo
-    Grupos:
+    system = f"""Por favor, classifique os comentários a seguir com base nas Subcategorias e Detalhamentos fornecidos.
+    Para cada comentário, selecione um item de cada lista, respeitando exatamente o texto do item, sem qualquer variação.
+    Se algum item não se encaixar ao comentário, preencha com "".
+    Antes de responder, certifique-se de que o item realmente está na sua respectiva lista.
+
+    Sua resposta deve conter exclusivamente:
     \nSentimento: Positivo, Negativo, Neutro, Misto
     \nCategoria: Elogio, Reclamação, Sugestão, Dúvida, Indefinido
     \nSubcategoria: {string_sub}
-    \nDetalhamento: {string_detail}
-    \nTodos os itens devem obrigatoriamente conter um Sentimento, Categoria, Subcategoria e Detalhamento.
-    \nVerifique se a sugestão de classificação está contida na lista, caso contrário, reconsiderar utilizando exatamente o texto contido na lista."""
+    \nDetalhamento: {string_detail}"""
     
     return system
 
