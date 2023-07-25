@@ -89,7 +89,7 @@ if st.button('Gerar Classificações'):
     df_reviews = format_results(df_reviews, df_results)
 
     # Substituir classificações que não estão na lista por nan
-    df_reviews = replace_errors_with_nan(df_reviews, df_classes):
+    df_reviews = replace_errors_with_nan(df_reviews, df_classes)
 
     st.write(df_reviews)
     st.write('Clique em Download para baixar o arquivo')
