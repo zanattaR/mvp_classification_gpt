@@ -48,20 +48,19 @@ def create_system(df_classes):
     list_sub = list(df_classes['Subcategoria'].dropna())
     list_detail = list(df_classes['Detalhamento'].dropna())
 
-    string_sub = ', '.join(list_sub)
-    string_detail = ', '.join(list_detail)
+    string_sub = ', '.join(f'"{s}"' for s in list_sub)
+    string_detail = ', '.join(f'"{s}"' for s in list_sub)
     
     system = f"""Haja como um classificador de texto. Irei fornecer um texto de um comentário de uma loja de aplicativos e 
     seu objetivo será classificar o comentário em 4 grupos de classes pré-estabelecidas que eu também vou fornecer.
     Para cada comentário, selecione um item de cada lista, respeitando exatamente o texto do item, sem qualquer variação.
-    Se algum item não se encaixar ao comentário, preencha com "".
-    Antes de responder, certifique-se de que o item realmente está na sua respectiva lista.
+    Lembre-se de utilizar apenas os itens que estão entre parênteses de seu respectivo grupo.
 
     Sua resposta deve conter exclusivamente:
-    \nSentimento: Positivo, Negativo, Neutro, Misto
-    \nCategoria: Elogio, Reclamação, Sugestão, Dúvida, Indefinido
-    \nSubcategoria: {string_sub}
-    \nDetalhamento: {string_detail}"""
+    \n"Sentimento": "Positivo", "Negativo", "Neutro", "Misto"
+    \n"Categoria": "Elogio", "Reclamação", "Sugestão", "Dúvida", "Indefinido"
+    \n"Subcategoria": {string_sub}
+    \n"Detalhamento": {string_detail}"""
     
     return system
 
@@ -102,7 +101,8 @@ async def get_chatgpt_responses(system, lotes_reviews):
                 {"role": "user", "content": '''Sua resposta deve ser apenas as classificações geradas dentro de um array,
                 nada mais. ''' + review_string}
             ],
-            "max_tokens":500
+            "max_tokens":500,
+            "temperature": 0.2
         }
 
         body_mensagem = json.dumps(body_mensagem)
@@ -146,6 +146,15 @@ def format_results(df_reviews, df_results):
     
     return df_reviews
 
+# Substituir classificações que não estão na lista por nan
+def replace_errors_with_nan(df_reviews, df_classes):
+    # Verificar valores da coluna "valor_a" com a coluna "lista_a"
+    df_reviews['Subcategory_pred'] = np.where(df_reviews['Subcategory_pred'].isin(df_classes['Subcategoria']), df_reviews['Subcategory_pred'], np.nan)
+
+    # Verificar valores da coluna "valor_b" com a coluna "lista_b"
+    df_reviews['Detailing_pred'] = np.where(df_reviews['Detailing_pred'].isin(df_classes['Detalhamento']), df_reviews['Detailing_pred'], np.nan)
+
+    return df_reviews
 
 
 
