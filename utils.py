@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 import xlsxwriter
 import base64
 from io import BytesIO
@@ -148,6 +149,7 @@ def format_results(df_reviews, df_results):
 
 # Substituir classificações que não estão na lista por nan
 def replace_errors_with_nan(df_reviews, df_classes):
+
     # Verificar valores da coluna "valor_a" com a coluna "lista_a"
     df_reviews['Subcategory_pred'] = np.where(df_reviews['Subcategory_pred'].isin(df_classes['Subcategoria']), df_reviews['Subcategory_pred'], np.nan)
 
