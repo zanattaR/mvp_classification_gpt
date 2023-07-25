@@ -50,7 +50,7 @@ def create_system(df_classes):
     list_detail = list(df_classes['Detalhamento'].dropna())
 
     string_sub = ', '.join(f'"{s}"' for s in list_sub)
-    string_detail = ', '.join(f'"{s}"' for s in list_sub)
+    string_detail = ', '.join(f'"{s}"' for s in list_detail)
     
     system = f"""Haja como um classificador de texto. Irei fornecer um texto de um comentário de uma loja de aplicativos e 
     seu objetivo será classificar o comentário em 4 grupos de classes pré-estabelecidas que eu também vou fornecer.
