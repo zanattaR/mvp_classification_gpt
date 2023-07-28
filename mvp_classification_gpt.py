@@ -15,16 +15,16 @@ st.write('Esta aplicação tem como objetivo auxiliar nas classificações de re
 st.write()
 
 # Inserindo arquivo de reviews
-reviewSheet = st.file_uploader("Insira um arquivo .xlsx com os reviews a serem classificados (Máx: 50 reviews)")
+reviewSheet = st.file_uploader("Insira um arquivo .xlsx com os reviews a serem classificados (Máx: 40 reviews)")
 if reviewSheet is not None:
     df_reviews = pd.read_excel(reviewSheet)
 
     # Lendo reviews e verificando se há mais de 100 registros
-    if df_reviews.shape[0] > 50:
-        st.warning("Há mais de 50 reviews nesta base, a classificação só será feita com os 50 primeiros.")
+    if df_reviews.shape[0] > 40:
+        st.warning("Há mais de 40 reviews nesta base, a classificação só será feita com os 40 primeiros.")
 
     # Filtrando os 100 primeiros reviews
-    df_reviews = df_reviews.iloc[:50]
+    df_reviews = df_reviews.iloc[:40]
 
 # Inserindo arquivo de classificações
 classSheet = st.file_uploader("Insira um arquivo .xlsx com as Subcategorias e Detalhamentos (Máx: 30 classes p/ Subcategoria e 70 p/ Detalhamento)")
