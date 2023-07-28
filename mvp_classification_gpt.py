@@ -15,16 +15,16 @@ st.write('Esta aplicação tem como objetivo auxiliar nas classificações de re
 st.write()
 
 # Inserindo arquivo de reviews
-reviewSheet = st.file_uploader("Insira um arquivo .xlsx com os reviews a serem classificados (Máx: 100 reviews)")
+reviewSheet = st.file_uploader("Insira um arquivo .xlsx com os reviews a serem classificados (Máx: 50 reviews)")
 if reviewSheet is not None:
     df_reviews = pd.read_excel(reviewSheet)
 
     # Lendo reviews e verificando se há mais de 100 registros
-    if df_reviews.shape[0] > 100:
-        st.warning("Há mais de 100 reviews nesta base, a classificação só será feita com os 100 primeiros.")
+    if df_reviews.shape[0] > 50:
+        st.warning("Há mais de 50 reviews nesta base, a classificação só será feita com os 50 primeiros.")
 
     # Filtrando os 100 primeiros reviews
-    df_reviews = df_reviews.iloc[:100]
+    df_reviews = df_reviews.iloc[:50]
 
 # Inserindo arquivo de classificações
 classSheet = st.file_uploader("Insira um arquivo .xlsx com as Subcategorias e Detalhamentos (Máx: 30 classes p/ Subcategoria e 70 p/ Detalhamento)")
@@ -68,7 +68,7 @@ if reviewSheet and classSheet is not None:
     list_reviews = make_reviews(df_reviews)
 
     # Particionar lotes de reviews para serem enviados em conjunto na API
-    lotes_reviews = coletar_lotes(list_reviews,5)
+    lotes_reviews = coletar_lotes(list_reviews,1)
 
     # Criação de contexto para o modelo. A função recebe as classes para compor o texto
     system  = create_system(df_classes)
@@ -81,6 +81,7 @@ if st.button('Gerar Classificações'):
 
     # Normalização de resultados recebidos pela API
     df_results = normalize_results(results)
+    df_results.dropna(inplace=True, axis=0)
 
     # Tratamento de lotes de classificação
     df_results = clean_results(df_results)

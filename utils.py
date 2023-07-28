@@ -94,13 +94,8 @@ async def get_chatgpt_responses(system, lotes_reviews):
             "model": id_modelo,
             "messages": [
                 {"role": "system", "content": system},
-                {"role": "user", "content": f'''Sua resposta deve ser apenas as classificações geradas dentro de um array, nada mais.
-                \nComentário: É bom, mas está com problemas
-                \nComentário: excelente
-                \nComentário: App pesado porém tem ótimos conteúdos'''},
-                {"role": "assistant", "content": "['Misto', 'Reclamação', 'Genérico', 'Comentário  genérico']\n['Positivo', 'Elogio', 'Genérico', 'Comentário  genérico']\n['Misto', 'Reclamação', 'Técnico', 'Conteúdo travando']"},
-                {"role": "user", "content": '''Sua resposta deve ser apenas as classificações geradas dentro de um array,
-                nada mais. ''' + review_string}
+                {"role": "user", "content": '''Sua resposta deve ser apenas as classificações geradas de cada
+                comentário dentro de um array, nada mais, no seguinte formato de exemplo: "['Sentimento', 'Categoria', 'Subcategoria', 'Detalhamento']"''' + review_string}
             ],
             "max_tokens":500,
             "temperature": 0.2
@@ -149,6 +144,13 @@ def format_results(df_reviews, df_results):
 
 # Substituir classificações que não estão na lista por nan
 def replace_errors_with_nan(df_reviews, df_classes):
+
+    # Padronizando strings de subcategorias e detalhamentos
+    df_classes['Detalhamento'] = df_classes['Detalhamento'].str.capitalize()
+    df_classes['Subcategoria'] = df_classes['Subcategoria'].str.capitalize()
+
+    df_reviews['Detailing_pred'] = df_reviews['Detailing_pred'].str.capitalize()
+    df_reviews['Subcategory_pred'] = df_reviews['Subcategory_pred'].str.capitalize()
 
     # Verificar valores da coluna "valor_a" com a coluna "lista_a"
     df_reviews['Subcategory_pred'] = np.where(df_reviews['Subcategory_pred'].isin(df_classes['Subcategoria']), df_reviews['Subcategory_pred'], np.nan)
