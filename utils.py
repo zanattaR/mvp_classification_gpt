@@ -47,11 +47,11 @@ def coletar_lotes(lista, tamanho_lote):
 # Contexto - Sentimentação
 def create_system_sentiment():
     
-    system = f'''As a text classifier, your task is to categorize comments from an app store review.
+    system = f"""As a text classifier, your task is to categorize comments from an app store review.
     I will provide you with a text representing a user's comment, and your objective is to match the comment with the most appropriate item from a pre-established list that I will also provide.
     The list contains specific items. your classification should strictly adhere to the exact wording of each item without any variation.
 
-    List: "Positivo", "Negativo", "Neutro", "Misto"'''
+    List: "Positivo", "Negativo", "Neutro", "Misto""""
     
     return system
 
