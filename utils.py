@@ -51,7 +51,7 @@ def create_system_sentiment():
     I will provide you with a text representing a user's comment, and your objective is to match the comment with the most appropriate item from a pre-established list that I will also provide.
     The list contains specific items. your classification should strictly adhere to the exact wording of each item without any variation.
 
-    List: "Positivo", "Negativo", "Neutro", "Misto""""
+    List: 'Positivo', 'Negativo', 'Neutro', 'Misto'"""
     
     return system
 
