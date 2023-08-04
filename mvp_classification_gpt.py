@@ -81,16 +81,16 @@ if reviewSheet and classSheet is not None:
 if st.button('Gerar Classificações'):
 
     # Request na API p/ gerar classificações
-    results_sentiment = await get_chatgpt_responses(system=system_sentiment, lotes_reviews=lotes_reviews)
+    results_sentiment = asyncio.run(get_chatgpt_responses(system=system_sentiment, lotes_reviews=lotes_reviews))
     time.sleep(3)
 
-    results_category = await get_chatgpt_responses(system=system_category, lotes_reviews=lotes_reviews)
+    results_category = asyncio.run(get_chatgpt_responses(system=system_category, lotes_reviews=lotes_reviews))
     time.sleep(3)
 
-    results_subcategory = await get_chatgpt_responses(system=system_subcategory, lotes_reviews=lotes_reviews)
+    results_subcategory = asyncio.run(get_chatgpt_responses(system=system_subcategory, lotes_reviews=lotes_reviews))
     time.sleep(3)
 
-    results_detail = await get_chatgpt_responses(system=system_detail, lotes_reviews=lotes_reviews)
+    results_detail = asyncio.run(get_chatgpt_responses(system=system_detail, lotes_reviews=lotes_reviews))
 
     # Normalização de resultados recebidos pela API
     df_results_sentiment = normalize_results(results_sentiment)
