@@ -9,22 +9,23 @@ from io import BytesIO
 import asyncio
 import aiohttp
 from utils import *
+import time
 
 st.title("ClassificationGPT")
 st.write('Esta aplicação tem como objetivo auxiliar nas classificações de reviews com o uso de IA')
 st.write()
 
 # Inserindo arquivo de reviews
-reviewSheet = st.file_uploader("Insira um arquivo .xlsx com os reviews a serem classificados (Máx: 40 reviews)")
+reviewSheet = st.file_uploader("Insira um arquivo .xlsx com os reviews a serem classificados (Máx: 50 reviews)")
 if reviewSheet is not None:
     df_reviews = pd.read_excel(reviewSheet)
 
     # Lendo reviews e verificando se há mais de 100 registros
-    if df_reviews.shape[0] > 40:
-        st.warning("Há mais de 40 reviews nesta base, a classificação só será feita com os 40 primeiros.")
+    if df_reviews.shape[0] > 50:
+        st.warning("Há mais de 50 reviews nesta base, a classificação só será feita com os 50 primeiros.")
 
     # Filtrando os 100 primeiros reviews
-    df_reviews = df_reviews.iloc[:40]
+    df_reviews = df_reviews.iloc[:50]
 
 # Inserindo arquivo de classificações
 classSheet = st.file_uploader("Insira um arquivo .xlsx com as Subcategorias e Detalhamentos (Máx: 30 classes p/ Subcategoria e 70 p/ Detalhamento)")
@@ -71,29 +72,58 @@ if reviewSheet and classSheet is not None:
     lotes_reviews = coletar_lotes(list_reviews,1)
 
     # Criação de contexto para o modelo. A função recebe as classes para compor o texto
-    system  = create_system(df_classes)
+    system_sentiment  = create_system_sentiment()
+    system_category  = create_system_category()
+    system_subcategory  = create_system_subcategory(df_classes)
+    system_detail  = create_system_detail(df_classes)
 
 ############# Tratamento e preparação de dados #############
 if st.button('Gerar Classificações'):
 
     # Request na API p/ gerar classificações
-    results = asyncio.run(get_chatgpt_responses(system, lotes_reviews))
+    results_sentiment = await get_chatgpt_responses(system=system_sentiment, lotes_reviews=lotes_reviews)
+    time.sleep(3)
+
+    results_category = await get_chatgpt_responses(system=system_category, lotes_reviews=lotes_reviews)
+    time.sleep(3)
+
+    results_subcategory = await get_chatgpt_responses(system=system_subcategory, lotes_reviews=lotes_reviews)
+    time.sleep(3)
+
+    results_detail = await get_chatgpt_responses(system=system_detail, lotes_reviews=lotes_reviews)
 
     # Normalização de resultados recebidos pela API
-    df_results = normalize_results(results)
-    df_results.dropna(inplace=True, axis=0)
+    df_results_sentiment = normalize_results(results_sentiment)
+    df_results_category = normalize_results(results_category)
+    df_results_subcategory = normalize_results(results_subcategory)
+    df_results_detail = normalize_results(results_detail)
+    df_results_sentiment.dropna(inplace=True, axis=0)
+    df_results_category.dropna(inplace=True, axis=0)
+    df_results_subcategory.dropna(inplace=True, axis=0)
+    df_results_detail.dropna(inplace=True, axis=0)
 
     # Tratamento de lotes de classificação
-    df_results = clean_results(df_results)
+    df_results_sentiment = clean_results(df_results_sentiment)
+    df_results_category = clean_results(df_results_category)
+    df_results_subcategory = clean_results(df_results_subcategory)
+    df_results_detail = clean_results(df_results_detail)
 
     # Acrescentar classificações no df de reviews, renomear colunas, adicionar valor Genérico caso não venha classificação da API
-    df_reviews = format_results(df_reviews, df_results)
+    df_reviews_sentiment = format_results(df_reviews=df_reviews, df_results=df_results_sentiment, group="Sentiment")
+    df_reviews_category = format_results(df_reviews=df_reviews, df_results=df_results_category, group="Category")
+    df_reviews_subcategory = format_results(df_reviews=df_reviews, df_results=df_results_subcategory, group="Subcategory")
+    df_reviews_detail = format_results(df_reviews=df_reviews, df_results=df_results_detail, group="Detailing")
 
     # Substituir classificações que não estão na lista por nan
-    df_reviews = replace_errors_with_nan(df_reviews, df_classes)
+    df_reviews_subcategory = replace_errors_with_nan(df_reviews=df_reviews_subcategory, df_classes=df_classes, group='Subcategory_pred', group_class='Subcategoria')
+    df_reviews_detail = replace_errors_with_nan(df_reviews=df_reviews_detail, df_classes=df_classes, group='Detailing_pred', group_class='Detalhamento')
 
-    st.write(df_reviews)
+    # Concatenar dfs de grupos
+    df_final = pd.concat([df_reviews_sentiment, df_reviews_category, df_reviews_subcategory, df_reviews_detail], axis=1)
+    df_final = df_final.loc[:, ~df_final.columns.duplicated()]
+
+    st.write(df_final)
     st.write('Clique em Download para baixar o arquivo')
-    st.markdown(get_table_download_link(df_reviews), unsafe_allow_html=True)
+    st.markdown(get_table_download_link(df_final), unsafe_allow_html=True)
 
 
