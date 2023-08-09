@@ -28,19 +28,19 @@ if reviewSheet is not None:
     df_reviews = df_reviews.iloc[:50]
 
 # Inserindo arquivo de classificações
-classSheet = st.file_uploader("Insira um arquivo .xlsx com as Subcategorias e Detalhamentos (Máx: 30 classes p/ Subcategoria e 70 p/ Detalhamento)")
+classSheet = st.file_uploader("Insira um arquivo .xlsx com as Subcategorias e Detalhamentos (Máx: 40 classes p/ Subcategoria e 100 p/ Detalhamento)")
 if classSheet is not None:
 
-    # Lendo reviews e verificando se há mais de 30 registros
+    # Lendo reviews e verificando se há mais de 40 registros
     df_classes = pd.read_excel(classSheet)    
-    if len(df_classes['Subcategoria'].dropna()) >30:
-        st.warning("Há mais de 30 Subcategorias nesta base, serão apenas considerados as 30 primeiras.")
+    if len(df_classes['Subcategoria'].dropna()) >40:
+        st.warning("Há mais de 30 Subcategorias nesta base, serão apenas considerados as 40 primeiras.")
 
-    if len(df_classes['Detalhamento'].dropna()) >70:
-        st.warning("Há mais de 70 Detalhamentos nesta base, serão apenas considerados os 70 primeiros.")
+    if len(df_classes['Detalhamento'].dropna()) >100:
+        st.warning("Há mais de 100 Detalhamentos nesta base, serão apenas considerados os 100 primeiros.")
     
     # Filtrando as 30 primeriras classificações
-    df_classes = df_classes.iloc[:70]
+    df_classes = df_classes.iloc[:100]
 
 # Visualizar dados
 check_reviews = st.checkbox("Visualizar Reviews")
