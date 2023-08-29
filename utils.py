@@ -112,7 +112,7 @@ async def get_data(session, body_mensagem):
 async def get_chatgpt_responses(system, lotes_reviews):
     
     url_base = "https://api.openai.com"
-    id_modelo = "gpt-3.5-turbo"
+    id_modelo = "gpt-3.5-turbo-16k"
     
     session = aiohttp.ClientSession(url_base)
     tasks = []
