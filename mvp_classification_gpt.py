@@ -82,6 +82,8 @@ if st.button('Gerar Classificações'):
 
     # Request na API p/ gerar classificações
     results_detail = asyncio.run(get_chatgpt_responses(system=system_detail, lotes_reviews=lotes_reviews))
+    if results_detail != []:
+        st.success("Detalhamento OK")
     time.sleep(3)
 
     results_sentiment = asyncio.run(get_chatgpt_responses(system=system_sentiment, lotes_reviews=lotes_reviews))
