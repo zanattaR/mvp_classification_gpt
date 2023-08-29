@@ -88,11 +88,17 @@ if st.button('Gerar Classificações'):
 
     results_sentiment = asyncio.run(get_chatgpt_responses(system=system_sentiment, lotes_reviews=lotes_reviews))
     time.sleep(3)
+    if results_sentiment != []:
+        st.success("Detalhamento OK")
 
     results_subcategory = asyncio.run(get_chatgpt_responses(system=system_subcategory, lotes_reviews=lotes_reviews))
     time.sleep(3)
+    if results_subcategory != []:
+        st.success("Detalhamento OK")
 
     results_category = asyncio.run(get_chatgpt_responses(system=system_category, lotes_reviews=lotes_reviews))
+    if results_category != []:
+        st.success("Detalhamento OK")
     
 
     
