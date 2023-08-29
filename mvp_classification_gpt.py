@@ -28,13 +28,13 @@ if reviewSheet is not None:
     df_reviews = df_reviews.iloc[:50]
 
 # Inserindo arquivo de classificações
-classSheet = st.file_uploader("Insira um arquivo .xlsx com as Subcategorias e Detalhamentos (Máx: 40 classes p/ Subcategoria e 100 p/ Detalhamento)")
+classSheet = st.file_uploader("Insira um arquivo .xlsx com as Subcategorias e Detalhamentos (Máx: 50 classes p/ Subcategoria e 100 p/ Detalhamento)")
 if classSheet is not None:
 
-    # Lendo reviews e verificando se há mais de 40 registros
+    # Lendo reviews e verificando se há mais de 50 registros
     df_classes = pd.read_excel(classSheet)    
-    if len(df_classes['Subcategoria'].dropna()) >40:
-        st.warning("Há mais de 30 Subcategorias nesta base, serão apenas considerados as 40 primeiras.")
+    if len(df_classes['Subcategoria'].dropna()) >50:
+        st.warning("Há mais de 50 Subcategorias nesta base, serão apenas considerados as 50 primeiras.")
 
     if len(df_classes['Detalhamento'].dropna()) >100:
         st.warning("Há mais de 100 Detalhamentos nesta base, serão apenas considerados os 100 primeiros.")
@@ -51,7 +51,7 @@ if reviewSheet is not None:
 check_subcategory = st.checkbox("Visualizar Subcategorias")
 if classSheet is not None:
     if check_subcategory:
-        st.write(df_classes[['Subcategoria']].iloc[:30])
+        st.write(df_classes[['Subcategoria']].iloc[:50])
 
 check_detail = st.checkbox("Visualizar Detalhamentos")
 if classSheet is not None:
@@ -81,16 +81,21 @@ if reviewSheet and classSheet is not None:
 if st.button('Gerar Classificações'):
 
     # Request na API p/ gerar classificações
-    results_sentiment = asyncio.run(get_chatgpt_responses(system=system_sentiment, lotes_reviews=lotes_reviews))
+    results_detail = asyncio.run(get_chatgpt_responses(system=system_detail, lotes_reviews=lotes_reviews))
     time.sleep(3)
 
-    results_category = asyncio.run(get_chatgpt_responses(system=system_category, lotes_reviews=lotes_reviews))
+    results_sentiment = asyncio.run(get_chatgpt_responses(system=system_sentiment, lotes_reviews=lotes_reviews))
     time.sleep(3)
 
     results_subcategory = asyncio.run(get_chatgpt_responses(system=system_subcategory, lotes_reviews=lotes_reviews))
     time.sleep(3)
+    
+    results_category = asyncio.run(get_chatgpt_responses(system=system_category, lotes_reviews=lotes_reviews))
+    
 
-    results_detail = asyncio.run(get_chatgpt_responses(system=system_detail, lotes_reviews=lotes_reviews))
+    
+
+    
 
     # Normalização de resultados recebidos pela API
     df_results_sentiment = normalize_results(results_sentiment)
