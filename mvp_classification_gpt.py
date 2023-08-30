@@ -82,23 +82,31 @@ if st.button('Gerar Classificações'):
 
     # Request na API p/ gerar classificações
     results_detail = asyncio.run(get_chatgpt_responses(system=system_detail, lotes_reviews=lotes_reviews))
-    if results_detail != []:
-        st.success("Detalhamento OK")
+    if 'error' in pd.DataFrame(results_detail).columns:
+        st.warning("Detalhamento: Ocorreu um erro na API. É possível que nem todos os reviews estejam classificados. Tente novamente mais tarde :)")
+    else:
+        st.success('Detalhamento OK')
     time.sleep(3)
 
     results_sentiment = asyncio.run(get_chatgpt_responses(system=system_sentiment, lotes_reviews=lotes_reviews))
     time.sleep(3)
-    if results_sentiment != []:
-        st.success("Sentimento OK")
+    if 'error' in pd.DataFrame(results_detail).columns:
+        st.warning("Sentimentação: Ocorreu um erro na API. É possível que nem todos os reviews estejam classificados. Tente novamente mais tarde :)")
+    else:
+        st.success('Sentimentação OK')
 
     results_subcategory = asyncio.run(get_chatgpt_responses(system=system_subcategory, lotes_reviews=lotes_reviews))
     time.sleep(3)
-    if results_subcategory != []:
-        st.success("Subcategoria OK")
+    if 'error' in pd.DataFrame(results_detail).columns:
+        st.warning("Subcategoria: Ocorreu um erro na API. É possível que nem todos os reviews estejam classificados. Tente novamente mais tarde :)")
+    else:
+        st.success('Subcategoria OK')
 
     results_category = asyncio.run(get_chatgpt_responses(system=system_category, lotes_reviews=lotes_reviews))
-    if results_category != []:
-        st.success("Categoria OK")
+    if 'error' in pd.DataFrame(results_detail).columns:
+        st.warning("Categoria: Ocorreu um erro na API. É possível que nem todos os reviews estejam classificados. Tente novamente mais tarde :)")
+    else:
+        st.success('Categoria OK')
     
 
     
