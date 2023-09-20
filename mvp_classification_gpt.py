@@ -16,16 +16,16 @@ st.write('Esta aplicação tem como objetivo auxiliar nas classificações de re
 st.write()
 
 # Inserindo arquivo de reviews
-reviewSheet = st.file_uploader("Insira um arquivo .xlsx com os reviews a serem classificados (Máx: 50 reviews)")
+reviewSheet = st.file_uploader("Insira um arquivo .xlsx com os reviews a serem classificados (Máx: 100 reviews)")
 if reviewSheet is not None:
     df_reviews = pd.read_excel(reviewSheet)
 
     # Lendo reviews e verificando se há mais de 100 registros
-    if df_reviews.shape[0] > 50:
-        st.warning("Há mais de 50 reviews nesta base, a classificação só será feita com os 50 primeiros.")
+    if df_reviews.shape[0] > 100:
+        st.warning("Há mais de 100 reviews nesta base, a classificação só será feita com os 100 primeiros.")
 
     # Filtrando os 100 primeiros reviews
-    df_reviews = df_reviews.iloc[:50]
+    df_reviews = df_reviews.iloc[:100]
 
 # Inserindo arquivo de classificações
 classSheet = st.file_uploader("Insira um arquivo .xlsx com as Subcategorias e Detalhamentos (Máx: 50 classes p/ Subcategoria e 100 p/ Detalhamento)")
@@ -56,7 +56,7 @@ if classSheet is not None:
 check_detail = st.checkbox("Visualizar Detalhamentos")
 if classSheet is not None:
     if check_detail:
-        st.write(df_classes[['Detalhamento']].iloc[:70])
+        st.write(df_classes[['Detalhamento']].iloc[:100])
 
 ############# Tratamento e preparação de dados #############
 if reviewSheet and classSheet is not None:
