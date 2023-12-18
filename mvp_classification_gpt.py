@@ -86,7 +86,6 @@ if st.button('Gerar Classificações'):
         st.warning("Detalhamento: Ocorreu um erro na API. É possível que nem todos os reviews estejam classificados. Tente novamente mais tarde :)")
     else:
         st.success('Detalhamento OK')
-        st.write(results_detail)
     time.sleep(3)
 
     results_sentiment = asyncio.run(get_chatgpt_responses(system=system_sentiment, lotes_reviews=lotes_reviews))
@@ -110,15 +109,17 @@ if st.button('Gerar Classificações'):
         st.success('Categoria OK')
     
 
-    
-
-    
-
     # Normalização de resultados recebidos pela API
     df_results_sentiment = normalize_results(results_sentiment)
     df_results_category = normalize_results(results_category)
     df_results_subcategory = normalize_results(results_subcategory)
     df_results_detail = normalize_results(results_detail)
+    
+    st.write(df_results_sentiment)
+    st.write(df_results_category)
+    st.write(df_results_subcategory)
+    st.write(df_results_detail)
+    
     df_results_sentiment.dropna(inplace=True, axis=0)
     df_results_category.dropna(inplace=True, axis=0)
     df_results_subcategory.dropna(inplace=True, axis=0)
