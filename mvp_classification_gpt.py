@@ -120,16 +120,16 @@ if st.button('Gerar Classificações'):
     df_results_subcategory.dropna(inplace=True, axis=0)
     df_results_detail.dropna(inplace=True, axis=0)
 
+    st.write(df_results_sentiment)
+    st.write(df_results_category)
+    st.write(df_results_subcategory)
+    st.write(df_results_detail)
+
     # Tratamento de lotes de classificação
     df_results_sentiment = clean_results(df_results_sentiment)
     df_results_category = clean_results(df_results_category)
     df_results_subcategory = clean_results(df_results_subcategory)
     df_results_detail = clean_results(df_results_detail)
-
-    st.write(df_results_sentiment)
-    st.write(df_results_category)
-    st.write(df_results_subcategory)
-    st.write(df_results_detail)
 
     # Acrescentar classificações no df de reviews, renomear colunas, adicionar valor Genérico caso não venha classificação da API
     df_reviews_sentiment = format_results(df_reviews=df_reviews, df_results=df_results_sentiment, group="Sentiment")
