@@ -86,6 +86,7 @@ if st.button('Gerar Classificações'):
         st.warning("Detalhamento: Ocorreu um erro na API. É possível que nem todos os reviews estejam classificados. Tente novamente mais tarde :)")
     else:
         st.success('Detalhamento OK')
+        st.write(results_detail)
     time.sleep(3)
 
     results_sentiment = asyncio.run(get_chatgpt_responses(system=system_sentiment, lotes_reviews=lotes_reviews))
